@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const passwordCriteria = document.getElementById('password-criteria');
 
     passwordCriteria.style.display = 'none';
-    const validPassword = false;
     // Email validation function
     emailInput.addEventListener('input', function() {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -35,9 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
         lowercaseLabel.style.color = /[a-z]/.test(value)?"green":"grey";
         uppercaseLabel.style.color = /[A-Z]/.test(value)?"green":"grey";
         specialLabel.style.color = /[!@#$%^&*(),.?":{}|<>]/.test(value)?"green":"grey";
-        if(value.length >= 8 && /\d/.test(value) && /[a-z]/.test(value) && /[A-Z]/.test(value) &&/[!@#$%^&*(),.?":{}|<>]/.test(value)){
-            validPassword = true;
-        }
     });
 
     // Confirm password matching
@@ -57,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const email = emailInput.value;
         const password = passwordInput.value;
         const confirmPassword = confirmPasswordInput.value;
-
+        var validPassword = (/[0-9a-zA-Z!@#$%^&*(),.?":{}|<>]/.test(password)) && (password.length>=8);
         // Additional validations before submission
         if (emailError.style.display === 'block') {
             alert('Please provide a valid email.');
