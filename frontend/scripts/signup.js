@@ -1,30 +1,56 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener('DOMContentLoaded', function() {
     const signupForm = document.getElementById('signup-form');
     const emailInput = document.getElementById('email');
+    const emailError = document.getElementById('email-error');
     const passwordInput = document.getElementById('password');
     const confirmPasswordInput = document.getElementById('confirm-password');
+    const passwordMatchError = document.getElementById('password-match-error');
 
-    // Function to validate email format
-    function validateEmail(email) {
-        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return emailPattern.test(email);
-    }
+    // Password criteria checkboxes
+    const digitLabel = document.getElementById('digit');
+    const lowercaseLabel = document.getElementById('lowercase');
+    const uppercaseLabel = document.getElementById('uppercase');
+    const specialLabel = document.getElementById('special');
+    const lengthLabel = document.getElementById('length');
+    const passwordCriteria = document.getElementById('password-criteria');
 
-    // Real-time validation for email input
+    passwordCriteria.style.display = 'none';
+    const validPassword = false;
+    // Email validation function
     emailInput.addEventListener('input', function() {
-        const email = emailInput.value;
-        const isValidEmail = validateEmail(email);
-
-        if (isValidEmail) {
-            emailInput.style.borderColor = "green";
-            emailInput.setCustomValidity("");
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailInput.value)) {
+            emailError.style.display = 'block';
         } else {
-            emailInput.style.borderColor = "red";
-            emailInput.setCustomValidity("Please enter a valid email address.");
+            emailError.style.display = 'none';
         }
     });
 
-    // Event listener for form submission
+    // Password validation function
+    passwordInput.addEventListener('input', function() {
+        const value = passwordInput.value;
+        passwordCriteria.style.display = 'block';
+        lengthLabel.style.color = value.length>=8?"green":"grey";
+        digitLabel.style.color = /\d/.test(value)?"green":"grey";
+        lowercaseLabel.style.color = /[a-z]/.test(value)?"green":"grey";
+        uppercaseLabel.style.color = /[A-Z]/.test(value)?"green":"grey";
+        specialLabel.style.color = /[!@#$%^&*(),.?":{}|<>]/.test(value)?"green":"grey";
+        if(/\d/.test(value) && /[a-z]/.test(value) && /[A-Z]/.test(value) &&/[!@#$%^&*(),.?":{}|<>]/.test(value)){
+            validPassword = true;
+        }
+    });
+
+    // Confirm password matching
+    confirmPasswordInput.addEventListener('input', function() {
+        passwordCriteria.style.display = 'none';
+        if (passwordInput.value !== confirmPasswordInput.value) {
+            passwordMatchError.style.display = 'block';
+        } else {
+            passwordMatchError.style.display = 'none';
+        }
+    });
+
+    // Handle form submission
     signupForm.addEventListener('submit', function(event) {
         event.preventDefault();
 
@@ -32,15 +58,23 @@ document.addEventListener("DOMContentLoaded", function() {
         const password = passwordInput.value;
         const confirmPassword = confirmPasswordInput.value;
 
-        // Check if passwords match
-        if (password !== confirmPassword) {
-            alert('Passwords do not match. Please try again.');
+        // Additional validations before submission
+        if (emailError.style.display === 'block') {
+            alert('Please provide a valid email.');
             return;
         }
 
-        // If validation passes, proceed with form submission
-        // Replace with your backend call here
+        if (passwordMatchError.style.display === 'block') {
+            alert('Passwords do not match.');
+            return;
+        }
+        if(!validPassword){
+            alert("Password criteria does not match");
+            return;
+        }
+        // Proceed with form submission or backend call here
         alert('Sign-up successful!');
-        signupForm.reset(); // Clear the form fields
+        // Redirect or submit form as needed
+        window.location.href = 'login.html';
     });
 });
