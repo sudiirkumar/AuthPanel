@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
         lowercaseLabel.style.color = /[a-z]/.test(value)?"green":"grey";
         uppercaseLabel.style.color = /[A-Z]/.test(value)?"green":"grey";
         specialLabel.style.color = /[!@#$%^&*(),.?":{}|<>]/.test(value)?"green":"grey";
-        if(/\d/.test(value) && /[a-z]/.test(value) && /[A-Z]/.test(value) &&/[!@#$%^&*(),.?":{}|<>]/.test(value)){
+        if(value.length >= 8 && /\d/.test(value) && /[a-z]/.test(value) && /[A-Z]/.test(value) &&/[!@#$%^&*(),.?":{}|<>]/.test(value)){
             validPassword = true;
         }
     });
